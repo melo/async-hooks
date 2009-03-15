@@ -6,5 +6,6 @@ META.yml
 lib/Async/Hooks.pm
 lib/Async/Hooks/Ctl.pm
 t/00-load.t
+t/10-ctl.t
 t/pod-coverage.t
 t/pod.t
