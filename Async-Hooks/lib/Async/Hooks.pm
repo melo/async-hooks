@@ -1,10 +1,12 @@
 package Async::Hooks;
 
-use warnings;
-use strict;
+use Mouse;
 
 our $VERSION = '0.01';
 
+
+no Mouse;
+__PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
