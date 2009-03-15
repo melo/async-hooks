@@ -4,6 +4,7 @@ Makefile.PL
 README
 META.yml
 lib/Async/Hooks.pm
+lib/Async/Hooks/Ctl.pm
 t/00-load.t
 t/pod-coverage.t
 t/pod.t
