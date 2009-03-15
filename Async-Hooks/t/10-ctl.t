@@ -35,6 +35,11 @@ sub done2 {
   return $_[0]->stop;
 }
 
+sub cleanup {
+  $called{'cleanup'}++;
+}
+
+
 ### Test args
 my $ctl = Async::Hooks::Ctl->new();
 cmp_deeply($ctl->args, []);
@@ -61,11 +66,13 @@ cmp_deeply(
 );
 
 $ctl = Async::Hooks::Ctl->new(
-  [ \&mark2, \&mark2, \&done2, \&done1 ],
+  [ \&mark2, \&mark2, \&done2, \&done1],
+  [],
+  \&cleanup,
 );
 %called = ();
 lives_ok sub { $ctl->declined };
 cmp_deeply(
   \%called,
-  { mark2 => 2, done2 => 1 },
+  { mark2 => 2, done2 => 1, cleanup => 1 },
 );
