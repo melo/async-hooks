@@ -3,17 +3,17 @@ package Async::Hooks;
 use warnings;
 use strict;
 
+our $VERSION = '0.01';
+
+
 =head1 NAME
 
 Async::Hooks - The great new Async::Hooks!
 
+
 =head1 VERSION
 
 Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
@@ -27,30 +27,12 @@ Perhaps a little code snippet.
     my $foo = Async::Hooks->new();
     ...
 
-=head1 EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 FUNCTIONS
-
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
 
 =head1 AUTHOR
 
 Pedro Melo, C<< <melo at cpan.org> >>
+
 
 =head1 BUGS
 
@@ -59,14 +41,11 @@ the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Async-Hook
 automatically be notified of progress on your bug as I make changes.
 
 
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
     perldoc Async::Hooks
-
 
 You can also look for information at:
 
