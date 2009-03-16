@@ -91,7 +91,7 @@ returning. Usually you just write:
     # ... or ...
     return $ctl->decline();
 
-If you know what you are doing, you can do this:
+If you know what you are doing, you can also do this:
 
     $ctl->decline();
     # do other stuff here
@@ -100,7 +100,7 @@ If you know what you are doing, you can do this:
 But there are no guarantees that your code after the control method call
 will be run at the end of the callback sequence.
 
-The important rule is that you must one and only one of the control
+The important rule is that you must call one and only one of the control
 methods per callback.
 
 The object provides two methods that control the invocation sequence,
