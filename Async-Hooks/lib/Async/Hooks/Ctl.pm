@@ -152,12 +152,28 @@ If there are no callbacks remaining, the cleanup callback is called if
 it exists.
 
 
+=item $ctl->declined()
+
+An alias to C<< $ctl->decline() >>.
+
+
+=item $ctl->next()
+
+An alias to C<< $ctl->decline() >>.
+
+
 =item $ctl->done()
 
 Stops the callback sequence. No other callbacks in the sequence will
 be called.
 
 The cleanup callback is called if it exists.
+
+
+=item $ctl->stop()
+
+An alias to C<< $ctl->done() >>.
+
 
 =back
 
