@@ -4,6 +4,13 @@ use Mouse;
 
 our $VERSION = '0.01';
 
+has registry => (
+  isa => 'HashRef',
+  is  => 'ro',
+  default =>  sub { {} }, 
+);
+
+
 
 no Mouse;
 __PACKAGE__->meta->make_immutable;
@@ -109,6 +116,9 @@ L<http://search.cpan.org/dist/Async-Hooks>
 
 
 =head1 ACKNOWLEDGEMENTS
+
+The code was inspired by the C<run_hook_fast> code of
+the L<DJabberd project|DJabberd>. Hat tip to Brad Fitzpatrick.
 
 
 =head1 COPYRIGHT & LICENSE
