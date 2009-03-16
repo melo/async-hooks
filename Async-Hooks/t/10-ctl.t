@@ -25,6 +25,11 @@ sub mark3 {
   return $_[0]->next;
 }
 
+sub bad_mark1 {
+  $called{'bad_mark1'}++;
+  return;
+}
+
 sub done1 {
   $called{'done1'}++;
   return $_[0]->done;
@@ -75,4 +80,15 @@ lives_ok sub { $ctl->declined };
 cmp_deeply(
   \%called,
   { mark2 => 2, done2 => 1, cleanup => 1 },
+);
+
+$ctl = Async::Hooks::Ctl->new(
+  [ \&mark2, \&mark2, \&bad_mark1, \&mark3 ],
+  [],
+);
+%called = ();
+lives_ok sub { $ctl->declined };
+cmp_deeply(
+  \%called,
+  { mark2 => 2, bad_mark1 => 1 },
 );
