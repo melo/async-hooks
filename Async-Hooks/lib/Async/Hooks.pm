@@ -10,7 +10,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Async::Hooks - The great new Async::Hooks!
+Async::Hooks - Hook system with asynchronous capabilities
 
 
 =head1 VERSION
@@ -20,15 +20,51 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use Async::Hooks;
+    
+    my $nc = Async::Hooks->new;
+    
+    # Hook a callback on 'my_hook_name' chain
+    $nc->hook('my_hook_name', sub {
+      my ($ctl, $args) = @_;
+      my $url = $args->[0];
+      
+      # Async HTTP get, calls sub when it finishes
+      http_get($url, sub {
+        my ($data) = @_;
+        
+        return $ctl->done unless defined $data;
 
-    my $foo = Async::Hooks->new();
-    ...
-
+        # You can use unused places in $args as a stash
+        $args->[1] = $data;
+        
+        $ctl->next;
+      });
+    });
+    
+    $nc->hook('my_hook_name', sub {
+      my ($ctl, $args) = @_;
+      
+      # example transformation
+      $args->[1] =~ s/(</?)(\w+)/"$1".uc($2)/ge;
+      
+      $ctl->next;
+    });
+    
+    # call hook with arguments
+    $nc->call('my_hook_name', ['http://search.cpan.org/']);
+    
+    # call hook with arguments and cleanup
+    $nc->call('my_hook_name', ['http://search.cpan.org/'], sub {
+      my ($ctl, $args) = @_;
+      
+      if (defined $args->[1]) {
+        print "Success!\n"
+      }
+      else {
+        print "Oops, could not retrieve URL $args->[0]\n";
+      }
+    });
 
 
 =head1 AUTHOR
