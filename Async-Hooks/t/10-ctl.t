@@ -40,6 +40,15 @@ sub done2 {
   return $_[0]->stop;
 }
 
+sub later1 {
+  my ($ctl, $args) = @_;
+
+  $called{'later1'}++;
+  ${$args->[0]} = $ctl;
+
+  return;
+}
+
 sub cleanup {
   $called{'cleanup'}++;
 }
@@ -92,3 +101,22 @@ cmp_deeply(
   \%called,
   { mark2 => 2, bad_mark1 => 1 },
 );
+
+my $later_cb;
+$ctl = Async::Hooks::Ctl->new(
+  [ \&mark1, \&mark2, \&later1, \&mark3 ],
+  [ \$later_cb ],
+);
+%called = ();
+lives_ok sub { $ctl->declined };
+cmp_deeply(
+  \%called,
+  { mark1 => 1, mark2 => 1, later1 => 1 },
+);
+%called = ();
+lives_ok sub { $later_cb->next };
+cmp_deeply(
+  \%called,
+  { mark3 => 1 },
+);
+
