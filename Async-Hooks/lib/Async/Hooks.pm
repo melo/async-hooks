@@ -1,6 +1,7 @@
 package Async::Hooks;
 
 use Mouse;
+use Async::Hooks::Ctl;
 
 our $VERSION = '0.01';
 
@@ -10,6 +11,35 @@ has registry => (
   default =>  sub { {} }, 
 );
 
+
+sub hook {
+  my ($self, $hook, $cb) = @_;
+  
+  confess("Missing first parameter, the hook name, ") unless $hook;
+  confess("Missing second parameter, the coderef callback, ")
+    unless ref($cb) eq 'CODE';
+  
+  my $cbs = $self->{registry}{$hook} ||= [];
+  push @$cbs, $cb;
+  
+  return;
+}
+
+
+sub call {
+  my ($self, $hook, $args, $cleanup) = @_;
+  
+  confess("Missing first parameter, the hook name, ") unless $hook;
+  confess("Second parameter, the arguments list, must be a arrayref, ")
+    if $args && ref($args) ne 'ARRAY';
+  confess("Third parameter, the cleanup callback, must be a coderef, ")
+    if $cleanup && ref($cleanup) ne 'CODE';
+  
+  my $r = $self->{registry};
+  my $cbs = exists $r->{$hook}? $r->{$hook} : [];
+  
+  return Async::Hooks::Ctl->new($cbs, $args, $cleanup)->next;
+}
 
 
 no Mouse;
