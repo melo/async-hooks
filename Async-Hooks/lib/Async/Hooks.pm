@@ -147,8 +147,10 @@ L<http://search.cpan.org/dist/Async-Hooks>
 
 =head1 ACKNOWLEDGEMENTS
 
-The code was inspired by the C<run_hook_fast> code of
-the L<DJabberd project|DJabberd>. Hat tip to Brad Fitzpatrick.
+The code was inspired by the C<run_hook_chain> and C<hook_chain_fast>
+code of the L<DJabberd project|DJabberd> (see the
+L<DJabberd::VHost|DJabberd::VHost> module source code). Hat tip to Brad
+Fitzpatrick.
 
 
 =head1 COPYRIGHT & LICENSE
