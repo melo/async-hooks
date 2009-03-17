@@ -106,6 +106,31 @@ Version 0.01
 
 =head1 DESCRIPTION
 
+This module allows you to create hooks on your own modules that other
+developers can use to extend your functionality, or just react to
+important state modifications.
+
+There are other modules that provide the same functionality (see
+L<SEE ALSO> section). The biggest diference is that you can pause
+processing of the chain of callbacks at any point and start a
+asynchronous network request, and resume processing when that request
+completes.
+
+Developers are not expect to subclass from C<Async::Hooks>. The
+recomended usage is to stick a C<Async::Hooks> instance in a slot or as
+a singleton for your whole app, and then delegate some methods to it.
+
+For example, using L<Moose|Moose> you can just:
+
+    has 'hooks' => (
+      isa     => 'Async::Hooks',
+      is      => 'ro',
+      default => sub { Async::Hooks->new },
+      lazy    => 1,
+      handles => [qw( hook call )],
+    );
+
+
 =head1 SEE ALSO
 
 There are a couple of modules that do similar things to this one:
