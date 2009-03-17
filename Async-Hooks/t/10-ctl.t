@@ -8,7 +8,7 @@ use Test::Exception;
 use Async::Hooks::Ctl;
 
 my %called;
-sub reset { %called = () }
+sub reset_called { %called = () }
 
 sub mark1 {
   $called{'mark1'}++;
@@ -57,13 +57,13 @@ sub cleanup {
 ### Test args
 my $ctl = Async::Hooks::Ctl->new();
 cmp_deeply($ctl->args, []);
-%called = ();
+reset_called();
 lives_ok sub { $ctl->next };
 cmp_deeply(\%called, {});
 
 $ctl = Async::Hooks::Ctl->new([], [1, 2, 3]);
 cmp_deeply($ctl->args, [1, 2, 3]);
-%called = ();
+reset_called();
 lives_ok sub { $ctl->decline };
 cmp_deeply(\%called, {});
 
@@ -72,7 +72,7 @@ cmp_deeply(\%called, {});
 $ctl = Async::Hooks::Ctl->new(
   [ \&mark1, \&mark2, \&done1, \&mark3 ],
 );
-%called = ();
+reset_called();
 lives_ok sub { $ctl->declined };
 cmp_deeply(
   \%called,
@@ -84,7 +84,7 @@ $ctl = Async::Hooks::Ctl->new(
   [],
   \&cleanup,
 );
-%called = ();
+reset_called();
 lives_ok sub { $ctl->declined };
 cmp_deeply(
   \%called,
@@ -95,7 +95,7 @@ $ctl = Async::Hooks::Ctl->new(
   [ \&mark2, \&mark2, \&bad_mark1, \&mark3 ],
   [],
 );
-%called = ();
+reset_called();
 lives_ok sub { $ctl->declined };
 cmp_deeply(
   \%called,
@@ -107,13 +107,13 @@ $ctl = Async::Hooks::Ctl->new(
   [ \&mark1, \&mark2, \&later1, \&mark3 ],
   [ \$later_cb ],
 );
-%called = ();
+reset_called();
 lives_ok sub { $ctl->declined };
 cmp_deeply(
   \%called,
   { mark1 => 1, mark2 => 1, later1 => 1 },
 );
-%called = ();
+reset_called();
 lives_ok sub { $later_cb->next };
 cmp_deeply(
   \%called,
