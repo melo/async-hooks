@@ -118,9 +118,11 @@ There are a couple of modules that do similar things to this one:
 
 =item * L<Event::Notify|Event::Notify>
 
+=item * L<Notification::Center|Notification::Center>
+
 =back
 
-Of those three, only L<Object::Event|Object::Event> version 1.0 and later
+Of those four, only L<Object::Event|Object::Event> version 1.0 and later
 provides the same ability to pause a chain, do some asynchrounous work
 and resume chain processing later.
 
