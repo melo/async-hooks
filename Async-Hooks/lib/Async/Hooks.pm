@@ -104,6 +104,27 @@ Version 0.01
     });
 
 
+=head1 DESCRIPTION
+
+=head1 SEE ALSO
+
+There are a couple of modules that do similar things to this one:
+
+=over 4
+
+=item * L<Object::Event|Object::Event>
+
+=item * L<Class::Observable|Class::Observable>
+
+=item * L<Event::Notify|Event::Notify>
+
+=back
+
+Of those three, only L<Object::Event|Object::Event> version 1.0 and later
+provides the same ability to pause a chain, do some asynchrounous work
+and resume chain processing later.
+
+
 =head1 AUTHOR
 
 Pedro Melo, C<< <melo at cpan.org> >>
