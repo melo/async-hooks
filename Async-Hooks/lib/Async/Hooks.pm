@@ -1,5 +1,6 @@
 package Async::Hooks;
 
+use 5.008;
 use Mouse;
 use Async::Hooks::Ctl;
 
