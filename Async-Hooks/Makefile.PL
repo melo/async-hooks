@@ -3,6 +3,7 @@ use inc::Module::Install;
 name     'Async-Hooks';
 all_from 'lib/Async/Hooks.pm';
 author   'Pedro Melo <melo@cpan.org>';
+repository 'http://github.com/melo/perl-async-hooks/';
 
 requires 'Mouse' => 0;
 

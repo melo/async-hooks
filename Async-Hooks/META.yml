@@ -1,5 +1,5 @@
 ---
-abstract: 'The great new Async::Hooks!'
+abstract: 'Hook system with asynchronous capabilities'
 author:
   - 'Pedro Melo <melo@cpan.org>'
 build_requires:
@@ -21,4 +21,5 @@ requires:
   Mouse: 0
 resources:
   license: http://dev.perl.org/licenses/
+  repository: http://github.com/melo/perl-async-hooks/
 version: 0.01
