@@ -1,15 +1,13 @@
 Async-Hooks
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+This module allows you to create hooks on your own modules that other
+developers can use to extend your functionality, or just react to
+important state modifications.
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+There are other modules that provide the same functionality. The biggest
+difference is that you can pause processing of the chain of callbacks at
+any point and start a asynchronous network request, and resume
+processing when that request completes.
 
 
 INSTALLATION
