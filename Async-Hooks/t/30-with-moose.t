@@ -5,7 +5,7 @@ use warnings;
 use Test::More 'no_plan';
 use Async::Hooks;
 
-eval "use Moose";
+eval "require Moose";
 plan skip_all => "Moose is required for these cute tests" if $@;
 
 package ChocolateMoose;
