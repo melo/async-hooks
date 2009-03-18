@@ -130,6 +130,107 @@ For example, using L<Moose|Moose> you can just:
       handles => [qw( hook call )],
     );
 
+There are two main usages for hooks: notification or delegation of
+responsability.
+
+You can define hook points for notification of important events inside
+your class. For example, if you where writting a feed aggregator, you
+could define a hook for notification of new items.
+
+In some other cases, your module wants to make part of its bussiness
+logic extendable or even replaceable. For example, a SMTP server can ask
+if a specific mail address is a valid RCPT. All the registered callbacks
+would be called and if one of them has a definitive answer she can just
+stop the chain. You can even define a default callback to be called at
+the end, as a cleanup step.
+
+You don't need to pre-declare or create a hook. Clients of your module
+should consult your documentation to discover which hooks to you support
+and then they should just call the C<hook()> method. It takes two
+parameters: a scalar, the hook name, and a coderef, the callback.
+
+To call the hook chain, you use the C<call()> method. It requires a
+scalar, the hook to call, as the first parameter. The second
+optional parameter is an arrayref with arguments, or undef. The third
+optional argument, a coderef, is a cleanup callback. This callback
+will be called at the end of the chain or as soon as some callback
+ends the chain.
+
+The callbacks all have a common signature. They receive two parameters.
+The first one is a L<Async::Hooks::Ctl|Async::Hooks::Ctl> object, used
+to control the chain of callbacks. The second is an arrayref with the
+arguments you used when the hook was called. Something like this:
+
+    sub my_callback {
+      my ($ctl, $args) = @_;
+      ....
+    }
+
+The callback only has one responsability: decide if you want to decline
+processing of this event, or stop processing if we are done with it.
+
+To do that, callbacks must call one of two methods:
+C<< $ctl->decline() >> or C<< $ctl->done() >>. You can also use
+C<next()> or C<declined()> as alias to C<decline()>, and C<stop()>
+as alias to C<done()>, whatever feels better.
+
+But you can delay that decision. You can start a network request,
+asynchronously, and only decide to decline or stop when the response
+arrives. For example, if you use the L<AnyEvent::HTTP|AnyEvent::HTTP>
+module to make a HTTP request, you could do something like this:
+
+    sub check_server_is_up_cb {
+      my ($ctl, $args) = @_;
+      my ($url) = @$args;
+      
+      http_get($url, sub {
+        my ($data, $headers) = @_;
+        
+        if (defined $data) {
+          push @$args = $data;
+          return $ctl->done;
+        }
+        
+        return $ctl->next;
+      });
+    }
+
+In this example, we start a HTTP GET, and use a second callback to
+process the result. If a sucessful result is found, we stop the chain.
+
+While the HTTP request is being made, your application can keep on
+processing other tasks.
+
+
+=head1 METHODS
+
+=over 4
+
+=item $registry = Async::Hooks->new()
+
+Creates a L<Async::Hooks|Async::Hooks> object that acts as a registry
+for hooks.
+
+You can have several object at the same time, independent of each other.
+
+=item $registry->hook($hook_name, \&cb);
+
+Register a callback with a specific hook.
+
+The callback will be called with two parameters: a
+L<Async::Hooks::Ctl|Async::Hooks::Ctl> object and an arrayref with
+arguments.
+
+=item $registry->call($hook_name, \@args, \&cleanup)
+
+Calls a specific hook name chain. You can optionally provide an arrayref
+with arguments that each callback will receive.
+
+The optional cleanup callback will be called at the end of the chain, or
+when a callback calls C<< $ctl->done() >>.
+
+=back
+
 
 =head1 SEE ALSO
 
