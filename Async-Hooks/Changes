@@ -1,5 +1,7 @@
 Revision history for Async-Hooks
 
+0.02    Thu Mar 19 18:49:39 WET 2009
+        * Fixed Moose tests when the Moose is missing
+
 0.01    Wed Mar 18 13:05:02 WET 2009
-        
         * First version, released on an unsuspecting world.
