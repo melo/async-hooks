@@ -39,7 +39,7 @@ sub call {
   my $r = $self->{registry};
   my $cbs = exists $r->{$hook}? $r->{$hook} : [];
   
-  return Async::Hooks::Ctl->new($cbs, $args, $cleanup)->next;
+  return Async::Hooks::Ctl->new([@$cbs], $args, $cleanup)->next;
 }
 
 
