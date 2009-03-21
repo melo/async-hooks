@@ -41,7 +41,14 @@ $nc->hook('h2', sub {
 $r = $nc->registry;
 is(scalar(keys %$r), 2);
 
-# Test a couple of times to see if first runs messes up internals
+$nc->hook('h2', sub {
+  my ($ctl) = @_;
+  $called{'h2_2'}++;
+  return $ctl->done;
+});
+
+
+### Test a couple of times to see if first runs messes up internals
 foreach my $try (1..3) {
   %called = ();
   $nc->call('h1');
@@ -49,7 +56,7 @@ foreach my $try (1..3) {
 
   %called = ();
   $nc->call('h2', [], sub { $called{'clean'}++ });
-  cmp_deeply(\%called, { h2_1 => 1, clean => 1 }, "h2, try $try");
+  cmp_deeply(\%called, { h2_1 => 1, h2_2 => 1, clean => 1 }, "h2, try $try");
 
   %called = ();
   $nc->call('non-existent');
@@ -61,8 +68,29 @@ foreach my $try (1..3) {
 }
 
 
-### Test API abuse
+### Test is_done flag
+$nc->call('h1', [], sub {
+  my ($ctl, $args, $is_done) = @_;
 
+  isa_ok($ctl, 'Async::Hooks::Ctl');
+  is(ref($args), 'ARRAY');
+  is(scalar(@$args), 0);
+  ok(defined($is_done));
+  ok(!$is_done);
+});
+
+$nc->call('h2', [1, 2], sub {
+  my ($ctl, $args, $is_done) = @_;
+
+  isa_ok($ctl, 'Async::Hooks::Ctl');
+  is(ref($args), 'ARRAY');
+  is(scalar(@$args), 2);
+  ok(defined($is_done));
+  ok($is_done);
+});
+
+
+### Test API abuse
 throws_ok sub {
   $nc->hook;
 }, qr/Missing first parameter, the hook name,/;

@@ -94,8 +94,8 @@ Version 0.01
     
     # call hook with arguments and cleanup
     $nc->call('my_hook_name', ['http://search.cpan.org/'], sub {
-      my ($ctl, $args) = @_;
-      
+      my ($ctl, $args, $is_done) = @_;
+
       if (defined $args->[1]) {
         print "Success!\n"
       }
@@ -167,8 +167,13 @@ arguments you used when the hook was called. Something like this:
       ....
     }
 
+A third parameter is passed to the cleanup callback: a C<$is_done> flag,
+with a true value if the chain was ended prematurely C<done()> or
+C<stop()>.
+
 The callback only has one responsability: decide if you want to decline
 processing of this event, or stop processing if we are done with it.
+Cleanup callbacks I<MUST> just return.
 
 To do that, callbacks must call one of two methods:
 C<< $ctl->decline() >> or C<< $ctl->done() >>. You can also use

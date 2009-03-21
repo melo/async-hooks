@@ -21,14 +21,10 @@ sub done {
   my $ctl = $_[0];
   
   @{$ctl->[1]} = ();
-  
-  if (my $cleanup = $ctl->[3]) {
-    return $cleanup->($ctl, $ctl->[2]);
-  }
-  
-  return;
+
+  return $ctl->_cleanup(1);
 }
-  
+
 *stop = \&done;
 
 
@@ -39,14 +35,20 @@ sub decline {
   my $hook = shift @{$ctl->[1]};
   return $hook->($ctl, $ctl->[2]) if $hook;
 
-  if (my $cleanup = $ctl->[3]) {
-    return $cleanup->($ctl, $ctl->[2]);
-  }
-  
-  return;
+  return $ctl->_cleanup(0);
 }
+
 *declined = \&decline;
 *next = \&declined;
+
+
+# _cleanup ends the chain processing
+sub _cleanup {
+  my ($ctl, $is_done) = @_;
+
+  return unless my $cleanup = $ctl->[3];
+  return $cleanup->($ctl, $ctl->[2], $is_done || 0);
+}
 
 1; # End of Async::Hooks::Ctl
 
@@ -109,7 +111,9 @@ and no other callback will be called. The C<decline()> method will call
 the next callback in the sequence.
 
 A cleanup callback can also be defined, and it will be called at the end
-of all callbacks, or imediatly after C<done()>.
+of all callbacks, or imediatly after C<done()>. This callback receives a
+third argument, a flag C<$is_done>, that will be true if the chain
+ended with a call to C<done()> or C<stop()>.
 
 The C<decline()> method can also be called as C<declined()> or
 C<next()>. The C<done()> method can also be called as C<stop()>.
@@ -148,8 +152,8 @@ Returns the hook arguments.
 
 Calls the next callback in the hook sequence.
 
-If there are no callbacks remaining, the cleanup callback is called if
-it exists.
+If there are no callbacks remaining and if a cleanup callback was
+defined, it will be called with the C<$is_done> flag as false.
 
 
 =item $ctl->declined()
@@ -167,7 +171,8 @@ An alias to C<< $ctl->decline() >>.
 Stops the callback sequence. No other callbacks in the sequence will
 be called.
 
-The cleanup callback is called if it exists.
+If a cleanup callback was defined, it will be called with the
+C<$is_done> flag as true.
 
 
 =item $ctl->stop()
