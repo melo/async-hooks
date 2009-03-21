@@ -4,7 +4,7 @@ use 5.008;
 use Mouse;
 use Async::Hooks::Ctl;
 
-our $VERSION = '0.01';
+our $VERSION = '0.03';
 
 has registry => (
   isa => 'HashRef',
