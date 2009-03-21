@@ -3,7 +3,7 @@ package Async::Hooks::Ctl;
 use strict;
 use warnings;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 
 # $self is a arrayref with two positions:
