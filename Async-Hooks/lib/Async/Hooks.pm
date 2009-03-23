@@ -27,6 +27,17 @@ sub hook {
 }
 
 
+sub has_hooks_for {
+  my ($self, $hook) = @_;
+  
+  confess("Missing first parameter, the hook name, ") unless $hook;
+  
+  my $reg = $self->{registry};
+  return 0 unless exists $reg->{$hook};
+  return scalar(@{$reg->{$hook}});
+}
+
+
 sub call {
   my ($self, $hook, $args, $cleanup) = @_;
   
@@ -234,6 +245,10 @@ with arguments that each callback will receive.
 
 The optional cleanup callback will be called at the end of the chain, or
 when a callback calls C<< $ctl->done() >>.
+
+=item $count = $registry->has_hooks_for($hook);
+
+Returns the number of callbacks registered with C<$hook>.
 
 =back
 

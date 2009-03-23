@@ -15,6 +15,8 @@ ok($r);
 is(ref($r), 'HASH');
 is(scalar(%$r), 0);
 
+is($nc->has_hooks_for('h1'), 0);
+
 my %called;
 
 $nc->hook('h1', sub {
@@ -24,6 +26,7 @@ $nc->hook('h1', sub {
 });
 $r = $nc->registry;
 is(scalar(keys %$r), 1);
+is($nc->has_hooks_for('h1'), 1);
 
 $nc->hook('h1', sub {
   my ($ctl) = @_;
@@ -32,7 +35,9 @@ $nc->hook('h1', sub {
 });
 $r = $nc->registry;
 is(scalar(keys %$r), 1);
+is($nc->has_hooks_for('h1'), 2);
 
+is($nc->has_hooks_for('h2'), 0);
 $nc->hook('h2', sub {
   my ($ctl) = @_;
   $called{'h2_1'}++;
@@ -46,6 +51,7 @@ $nc->hook('h2', sub {
   $called{'h2_2'}++;
   return $ctl->done;
 });
+is($nc->has_hooks_for('h2'), 2);
 
 
 ### Test a couple of times to see if first runs messes up internals
