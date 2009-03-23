@@ -2,11 +2,11 @@ Revision history for Async-Hooks
 
 0.04    Sat Mar 21 15:20:33 WET 2009
         * Added $is_done flag to cleanup callback
-			 
-0.03  	Sat Mar 21 14:46:36 WET 2009
+
+0.03    Sat Mar 21 14:46:36 WET 2009
         * Make sure our versions have two digits
 			  * Fix: chain run was clearing all callbacks
-			 
+
 0.02    Thu Mar 19 18:49:39 WET 2009
         * Fixed Moose tests when the Moose is missing
 
