@@ -1,7 +1,7 @@
 use inc::Module::Install;
 
 name     'Async-Hooks';
-version  '0.05_01';
+version  '0.05';
 abstract 'Hook system with asynchronous capabilities';
 author   'Pedro Melo <melo@cpan.org>';
 license  'perl';

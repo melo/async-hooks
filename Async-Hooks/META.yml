@@ -23,4 +23,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/melo/perl-async-hooks/
-version: 0.05_01
+version: 0.05
