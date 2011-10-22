@@ -1,6 +1,9 @@
 Revision history for Async-Hooks
 
 {{$NEXT}}
+        * Re-organize test suite to be easier to read and extend
+        * Bump version to be bigger than the one in 0.05
+          Async::Hooks::Ctl file
 
 0.06      2011-10-22 17:52:59 Europe/Lisbon
         * Dzil-ify the distribution
