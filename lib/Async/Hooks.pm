@@ -5,6 +5,7 @@ package Async::Hooks;
 use Mo qw(is default);
 use Carp 'confess';
 use Async::Hooks::Ctl;
+use namespace::clean;
 
 
 has registry => (

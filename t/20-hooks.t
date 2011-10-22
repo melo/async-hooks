@@ -170,3 +170,8 @@ throws_ok sub {
   $nc->call('hook', [], 'method');
 }, qr/Third parameter, the cleanup callback, must be a coderef,/;
 
+
+### Make sure we keep our house clean
+for my $m (qw(confess has extends)) {
+  ok(!$nc->can($m), "Async::Hooks has no '$m' method, good");
+}
