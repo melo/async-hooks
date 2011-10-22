@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Test::More 'no_plan';
 use Test::Deep;
-use Test::Exception;
+use Test::Fatal;
 use Async::Hooks::Ctl;
 
 my %called;
@@ -58,13 +58,13 @@ sub cleanup {
 my $ctl = Async::Hooks::Ctl->new();
 cmp_deeply($ctl->args, []);
 reset_called();
-lives_ok sub { $ctl->next };
+is(exception { $ctl->next }, undef);
 cmp_deeply(\%called, {});
 
 $ctl = Async::Hooks::Ctl->new([], [1, 2, 3]);
 cmp_deeply($ctl->args, [1, 2, 3]);
 reset_called();
-lives_ok sub { $ctl->decline };
+is(exception { $ctl->decline }, undef);
 cmp_deeply(\%called, {});
 
 
@@ -73,7 +73,7 @@ $ctl = Async::Hooks::Ctl->new(
   [ \&mark1, \&mark2, \&done1, \&mark3 ],
 );
 reset_called();
-lives_ok sub { $ctl->declined };
+is(exception { $ctl->declined }, undef);
 cmp_deeply(
   \%called,
   { mark1 => 1, mark2 => 1, done1 => 1 },
@@ -85,7 +85,7 @@ $ctl = Async::Hooks::Ctl->new(
   \&cleanup,
 );
 reset_called();
-lives_ok sub { $ctl->declined };
+is(exception { $ctl->declined }, undef);
 cmp_deeply(
   \%called,
   { mark2 => 2, done2 => 1, cleanup => 1 },
@@ -96,7 +96,7 @@ $ctl = Async::Hooks::Ctl->new(
   [],
 );
 reset_called();
-lives_ok sub { $ctl->declined };
+is(exception { $ctl->declined }, undef);
 cmp_deeply(
   \%called,
   { mark2 => 2, bad_mark1 => 1 },
@@ -108,13 +108,13 @@ $ctl = Async::Hooks::Ctl->new(
   [ \$later_cb ],
 );
 reset_called();
-lives_ok sub { $ctl->declined };
+is(exception { $ctl->declined }, undef);
 cmp_deeply(
   \%called,
   { mark1 => 1, mark2 => 1, later1 => 1 },
 );
 reset_called();
-lives_ok sub { $later_cb->next };
+is(exception { $later_cb->next }, undef);
 cmp_deeply(
   \%called,
   { mark3 => 1 },

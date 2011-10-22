@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Test::More 'no_plan';
 use Test::Deep;
-use Test::Exception;
+use Test::Fatal;
 
 use Async::Hooks;
 
@@ -133,42 +133,42 @@ $nc->call('i1', [ 2, 'bb' ], sub {
 
 
 ### Test API abuse
-throws_ok sub {
+like(exception {
   $nc->hook;
-}, qr/Missing first parameter, the hook name,/;
+}, qr/Missing first parameter, the hook name,/);
 
-throws_ok sub {
+like(exception {
   $nc->hook('hook');
-}, qr/Missing second parameter, the coderef callback,/;
+}, qr/Missing second parameter, the coderef callback,/);
 
-throws_ok sub {
+like(exception {
   $nc->hook('hook', 'method');
-}, qr/Missing second parameter, the coderef callback,/;
+}, qr/Missing second parameter, the coderef callback,/);
 
-throws_ok sub {
+like(exception {
   $nc->hook(undef, sub {});
-}, qr/Missing first parameter, the hook name,/;
+}, qr/Missing first parameter, the hook name,/);
 
 
-throws_ok sub {
+like(exception {
   $nc->call;
-}, qr/Missing first parameter, the hook name,/;
+}, qr/Missing first parameter, the hook name,/);
 
-throws_ok sub {
+like(exception {
   $nc->call('hook', 'wtf');
-}, qr/Second parameter, the arguments list, must be a arrayref,/;
+}, qr/Second parameter, the arguments list, must be a arrayref,/);
 
-throws_ok sub {
+like(exception {
   $nc->call('hook', {});
-}, qr/Second parameter, the arguments list, must be a arrayref,/;
+}, qr/Second parameter, the arguments list, must be a arrayref,/);
 
-throws_ok sub {
+like(exception {
   $nc->call('hook', undef, 'method');
-}, qr/Third parameter, the cleanup callback, must be a coderef,/;
+}, qr/Third parameter, the cleanup callback, must be a coderef,/);
 
-throws_ok sub {
+like(exception {
   $nc->call('hook', [], 'method');
-}, qr/Third parameter, the cleanup callback, must be a coderef,/;
+}, qr/Third parameter, the cleanup callback, must be a coderef,/);
 
 
 ### Make sure we keep our house clean
