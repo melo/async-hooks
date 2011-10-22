@@ -40,6 +40,7 @@ sub has_hooks_for {
 
 sub call {
   my ($self, $hook, $args, $cleanup) = @_;
+  ($args, $cleanup) = (undef, $args) if ref($args) eq 'CODE' && !$cleanup;
   
   confess("Missing first parameter, the hook name, ") unless $hook;
   confess("Second parameter, the arguments list, must be a arrayref, ")

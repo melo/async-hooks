@@ -96,6 +96,42 @@ $nc->call('h2', [1, 2], sub {
 });
 
 
+### Test modifiable args
+
+$nc->hook('i1', sub {
+  my ($ctl, $args) = @_;
+  ok($args->[0]);
+  my $value = $args->[0]++;
+  
+  return $ctl->next if $value % 2 == 0;
+  return $ctl->done;
+});
+
+$nc->hook('i1', sub {
+  my ($ctl, $args) = @_;
+  ok($args->[0]);
+  $args->[0] += 2;
+  $args->[1] = '';
+  
+  return $ctl->next;
+});
+is($nc->has_hooks_for('i1'), 2);
+
+$nc->call('i1', [ 1, 'aa' ], sub {
+  my ($ctl, $args, $is_done) = @_;
+  is($args->[0], 2);
+  is($args->[1], 'aa');
+  ok($is_done);
+});
+
+$nc->call('i1', [ 2, 'bb' ], sub {
+  my ($ctl, $args, $is_done) = @_;
+  is($args->[0], 5);
+  is($args->[1], '');
+  ok(!$is_done);
+});
+
+
 ### Test API abuse
 throws_ok sub {
   $nc->hook;

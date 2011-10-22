@@ -6,7 +6,7 @@ use warnings;
 our $VERSION = '0.12';
 
 
-# $self is a arrayref with two positions:
+# $self is a arrayref with three positions:
 #   . first  is a arrayref with hooks to call;
 #   . second is a arrayref with the arguments of each hook;
 #   . third is the cleanup sub: always called even when done().
