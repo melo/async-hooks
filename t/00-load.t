@@ -1,9 +1,11 @@
-#!perl -T
+#!perl
 
-use Test::More tests => 1;
+use strict;
+use warnings;
+use Test::More;
 
-BEGIN {
-  use_ok('Async::Hooks');
-}
-
+use_ok('Async::Hooks');
 diag("Testing Async::Hooks $Async::Hooks::VERSION, Perl $], $^X");
+
+
+done_testing();

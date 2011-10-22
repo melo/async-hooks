@@ -5,16 +5,11 @@ use warnings;
 use Test::More;
 use Async::Hooks;
 
-BEGIN {
-  eval { require Moose };
-  plan skip_all => "Moose is required for these cute tests" if $@;
-}
-
-plan 'no_plan';
+eval { require Moose };
+plan skip_all => "Moose is required for these cute tests" if $@;
 
 
 package ChocolateMoose;
-
 use Moose;
 
 has 'hooks' => (
@@ -46,3 +41,5 @@ $cm->hook(
 
 $cm->bork;
 is($borked, 1);
+
+done_testing();
