@@ -2,11 +2,12 @@ package Async::Hooks;
 
 # ABSTRACT: Hook system with asynchronous capabilities
 
-use Mouse;
+use Mo qw(is default);
+use Carp 'confess';
 use Async::Hooks::Ctl;
 
+
 has registry => (
-  isa     => 'HashRef',
   is      => 'ro',
   default => sub { {} },
 );
@@ -53,9 +54,6 @@ sub call {
   return Async::Hooks::Ctl->new([@$cbs], $args, $cleanup)->next;
 }
 
-
-no Mouse;
-__PACKAGE__->meta->make_immutable;
 
 1;    # End of Async::Hooks
 
