@@ -69,54 +69,31 @@ cmp_deeply(\%called, {});
 
 
 ### test hooks
-$ctl = Async::Hooks::Ctl->new(
-  [ \&mark1, \&mark2, \&done1, \&mark3 ],
-);
+$ctl = Async::Hooks::Ctl->new([\&mark1, \&mark2, \&done1, \&mark3],);
 reset_called();
 is(exception { $ctl->declined }, undef);
-cmp_deeply(
-  \%called,
-  { mark1 => 1, mark2 => 1, done1 => 1 },
-);
+cmp_deeply(\%called, {mark1 => 1, mark2 => 1, done1 => 1},);
 
-$ctl = Async::Hooks::Ctl->new(
-  [ \&mark2, \&mark2, \&done2, \&done1],
-  [],
-  \&cleanup,
-);
+$ctl =
+  Async::Hooks::Ctl->new([\&mark2, \&mark2, \&done2, \&done1], [], \&cleanup,
+  );
 reset_called();
 is(exception { $ctl->declined }, undef);
-cmp_deeply(
-  \%called,
-  { mark2 => 2, done2 => 1, cleanup => 1 },
-);
+cmp_deeply(\%called, {mark2 => 2, done2 => 1, cleanup => 1},);
 
-$ctl = Async::Hooks::Ctl->new(
-  [ \&mark2, \&mark2, \&bad_mark1, \&mark3 ],
-  [],
-);
+$ctl = Async::Hooks::Ctl->new([\&mark2, \&mark2, \&bad_mark1, \&mark3], [],);
 reset_called();
 is(exception { $ctl->declined }, undef);
-cmp_deeply(
-  \%called,
-  { mark2 => 2, bad_mark1 => 1 },
-);
+cmp_deeply(\%called, {mark2 => 2, bad_mark1 => 1},);
 
 my $later_cb;
-$ctl = Async::Hooks::Ctl->new(
-  [ \&mark1, \&mark2, \&later1, \&mark3 ],
-  [ \$later_cb ],
-);
+$ctl =
+  Async::Hooks::Ctl->new([\&mark1, \&mark2, \&later1, \&mark3], [\$later_cb],
+  );
 reset_called();
 is(exception { $ctl->declined }, undef);
-cmp_deeply(
-  \%called,
-  { mark1 => 1, mark2 => 1, later1 => 1 },
-);
+cmp_deeply(\%called, {mark1 => 1, mark2 => 1, later1 => 1},);
 reset_called();
 is(exception { $later_cb->next }, undef);
-cmp_deeply(
-  \%called,
-  { mark3 => 1 },
-);
+cmp_deeply(\%called, {mark3 => 1},);
 

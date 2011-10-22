@@ -34,12 +34,15 @@ package main;
 my $cm = ChocolateMoose->new;
 my $borked;
 
-$cm->hook('bork?', sub {
-  my ($ctl) = @_;
-  ok(1, 'borked just fine...');
-  $borked++;
-  $ctl->next;
-});
+$cm->hook(
+  'bork?',
+  sub {
+    my ($ctl) = @_;
+    ok(1, 'borked just fine...');
+    $borked++;
+    $ctl->next;
+  }
+);
 
 $cm->bork;
 is($borked, 1);
