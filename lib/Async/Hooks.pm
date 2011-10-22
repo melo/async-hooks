@@ -2,7 +2,6 @@ package Async::Hooks;
 
 # ABSTRACT: Hook system with asynchronous capabilities
 
-use 5.008;
 use Mouse;
 use Async::Hooks::Ctl;
 
