@@ -1,10 +1,8 @@
 package Async::Hooks::Ctl;
+# ABSTRACT: Hook control object
 
 use strict;
 use warnings;
-
-our $VERSION = '0.12';
-
 
 # $self is a arrayref with three positions:
 #   . first  is a arrayref with hooks to call;
@@ -51,16 +49,6 @@ sub _cleanup {
 }
 
 1; # End of Async::Hooks::Ctl
-
-=head1 NAME
-
-Async::Hooks::Ctl - Hook control object
-
-
-=head1 VERSION
-
-Version 0.01
-
 
 =head1 SYNOPSIS
 
@@ -182,18 +170,4 @@ An alias to C<< $ctl->done() >>.
 
 =back
 
-
-=head1 AUTHOR
-
-Pedro Melo, C<< <melo at cpan.org> >>
-
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Pedro Melo, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
 =cut
-

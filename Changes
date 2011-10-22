@@ -1,5 +1,8 @@
 Revision history for Async-Hooks
 
+{{$NEXT}}
+        * Dzil-ify the distribution
+
 0.05    Mon Mar 23 17:50:12 WET 2009
         * Added has_hooks_for($hook) method
 

@@ -1,10 +1,9 @@
 package Async::Hooks;
+## ABSTRACT: Hook system with asynchronous capabilities
 
 use 5.008;
 use Mouse;
 use Async::Hooks::Ctl;
-
-our $VERSION = '0.05';
 
 has registry => (
   isa => 'HashRef',
@@ -58,15 +57,7 @@ sub call {
 no Mouse;
 __PACKAGE__->meta->make_immutable;
 
-=head1 NAME
-
-Async::Hooks - Hook system with asynchronous capabilities
-
-
-=head1 VERSION
-
-Version 0.01
-
+1; # End of Async::Hooks
 
 =head1 SYNOPSIS
 
@@ -275,47 +266,6 @@ provides the same ability to pause a chain, do some asynchrounous work
 and resume chain processing later.
 
 
-=head1 AUTHOR
-
-Pedro Melo, C<< <melo at cpan.org> >>
-
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-async-hooks at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Async-Hooks>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Async::Hooks
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Async-Hooks>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Async-Hooks>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Async-Hooks>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Async-Hooks>
-
-=back
-
-
 =head1 ACKNOWLEDGEMENTS
 
 The code was inspired by the C<run_hook_chain> and C<hook_chain_fast>
@@ -323,15 +273,4 @@ code of the L<DJabberd project|DJabberd> (see the
 L<DJabberd::VHost|DJabberd::VHost> module source code). Hat tip to Brad
 Fitzpatrick.
 
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Pedro Melo, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-
 =cut
-
-1; # End of Async::Hooks
