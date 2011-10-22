@@ -1,6 +1,8 @@
 Revision history for Async-Hooks
 
 {{$NEXT}}
+
+0.06      2011-10-22 17:52:59 Europe/Lisbon
         * Dzil-ify the distribution
 
 0.05    Mon Mar 23 17:50:12 WET 2009
