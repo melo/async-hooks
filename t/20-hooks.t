@@ -163,10 +163,6 @@ throws_ok sub {
 }, qr/Second parameter, the arguments list, must be a arrayref,/;
 
 throws_ok sub {
-  $nc->call('hook', sub {});
-}, qr/Second parameter, the arguments list, must be a arrayref,/;
-
-throws_ok sub {
   $nc->call('hook', undef, 'method');
 }, qr/Third parameter, the cleanup callback, must be a coderef,/;
 

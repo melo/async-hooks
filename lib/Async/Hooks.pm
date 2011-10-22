@@ -230,7 +230,7 @@ The callback will be called with two parameters: a
 L<Async::Hooks::Ctl|Async::Hooks::Ctl> object and an arrayref with
 arguments.
 
-=item $registry->call($hook_name, \@args, \&cleanup)
+=item $registry->call($hook_name [, \@args] [, \&cleanup])
 
 Calls a specific hook name chain. You can optionally provide an arrayref
 with arguments that each callback will receive.
