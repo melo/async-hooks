@@ -1,36 +1,37 @@
 package Async::Hooks;
-## ABSTRACT: Hook system with asynchronous capabilities
+
+# ABSTRACT: Hook system with asynchronous capabilities
 
 use 5.008;
 use Mouse;
 use Async::Hooks::Ctl;
 
 has registry => (
-  isa => 'HashRef',
-  is  => 'ro',
-  default =>  sub { {} }, 
+  isa     => 'HashRef',
+  is      => 'ro',
+  default => sub { {} },
 );
 
 
 sub hook {
   my ($self, $hook, $cb) = @_;
-  
+
   confess("Missing first parameter, the hook name, ") unless $hook;
   confess("Missing second parameter, the coderef callback, ")
     unless ref($cb) eq 'CODE';
-  
+
   my $cbs = $self->{registry}{$hook} ||= [];
   push @$cbs, $cb;
-  
+
   return;
 }
 
 
 sub has_hooks_for {
   my ($self, $hook) = @_;
-  
+
   confess("Missing first parameter, the hook name, ") unless $hook;
-  
+
   my $reg = $self->{registry};
   return 0 unless exists $reg->{$hook};
   return scalar(@{$reg->{$hook}});
@@ -40,16 +41,16 @@ sub has_hooks_for {
 sub call {
   my ($self, $hook, $args, $cleanup) = @_;
   ($args, $cleanup) = (undef, $args) if ref($args) eq 'CODE' && !$cleanup;
-  
+
   confess("Missing first parameter, the hook name, ") unless $hook;
   confess("Second parameter, the arguments list, must be a arrayref, ")
     if $args && ref($args) ne 'ARRAY';
   confess("Third parameter, the cleanup callback, must be a coderef, ")
     if $cleanup && ref($cleanup) ne 'CODE';
-  
+
   my $r = $self->{registry};
-  my $cbs = exists $r->{$hook}? $r->{$hook} : [];
-  
+  my $cbs = exists $r->{$hook} ? $r->{$hook} : [];
+
   return Async::Hooks::Ctl->new([@$cbs], $args, $cleanup)->next;
 }
 
@@ -57,44 +58,44 @@ sub call {
 no Mouse;
 __PACKAGE__->meta->make_immutable;
 
-1; # End of Async::Hooks
+1;    # End of Async::Hooks
 
 =head1 SYNOPSIS
 
     use Async::Hooks;
-    
+
     my $nc = Async::Hooks->new;
-    
+
     # Hook a callback on 'my_hook_name' chain
     $nc->hook('my_hook_name', sub {
       my ($ctl, $args) = @_;
       my $url = $args->[0];
-      
+
       # Async HTTP get, calls sub when it finishes
       http_get($url, sub {
         my ($data) = @_;
-        
+
         return $ctl->done unless defined $data;
 
         # You can use unused places in $args as a stash
         $args->[1] = $data;
-        
+
         $ctl->next;
       });
     });
-    
+
     $nc->hook('my_hook_name', sub {
       my ($ctl, $args) = @_;
-      
+
       # example transformation
       $args->[1] =~ s/(</?)(\w+)/"$1".uc($2)/ge;
-      
+
       $ctl->next;
     });
-    
+
     # call hook with arguments
     $nc->call('my_hook_name', ['http://search.cpan.org/']);
-    
+
     # call hook with arguments and cleanup
     $nc->call('my_hook_name', ['http://search.cpan.org/'], sub {
       my ($ctl, $args, $is_done) = @_;
@@ -191,15 +192,15 @@ module to make a HTTP request, you could do something like this:
     sub check_server_is_up_cb {
       my ($ctl, $args) = @_;
       my ($url) = @$args;
-      
+
       http_get($url, sub {
         my ($data, $headers) = @_;
-        
+
         if (defined $data) {
           push @$args = $data;
           return $ctl->done;
         }
-        
+
         return $ctl->next;
       });
     }

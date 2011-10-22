@@ -1,4 +1,5 @@
 package Async::Hooks::Ctl;
+
 # ABSTRACT: Hook control object
 
 use strict;
@@ -8,16 +9,16 @@ use warnings;
 #   . first  is a arrayref with hooks to call;
 #   . second is a arrayref with the arguments of each hook;
 #   . third is the cleanup sub: always called even when done().
-# 
- 
-sub new  { return bless [ undef, $_[1]||[], $_[2]||[], $_[3] ], $_[0] }
+#
 
-sub args   { return $_[0][2] }
+sub new { return bless [undef, $_[1] || [], $_[2] || [], $_[3]], $_[0] }
+
+sub args { return $_[0][2] }
 
 # stop() or done() stops the chain
 sub done {
   my $ctl = $_[0];
-  
+
   @{$ctl->[1]} = ();
 
   return $ctl->_cleanup(1);
@@ -37,7 +38,7 @@ sub decline {
 }
 
 *declined = \&decline;
-*next = \&declined;
+*next     = \&declined;
 
 
 # _cleanup ends the chain processing
@@ -48,18 +49,18 @@ sub _cleanup {
   return $cleanup->($ctl, $ctl->[2], $is_done || 0);
 }
 
-1; # End of Async::Hooks::Ctl
+1;    # End of Async::Hooks::Ctl
 
 =head1 SYNOPSIS
 
     # inside a callback
-    
+
     sub my_callback {
       my $ctl = shift;     # This is the Async::Hooks::Ctl object
       my $args = shift;    # Arguments for the hook
-      
+
       $args = $ctl->args;  # Args are also available with the args() method
-      
+
       return $ctl->done;          # no other callbacks are called
                            # ... or ...
       return $ctl->decline;       # call next callback
