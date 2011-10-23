@@ -5,8 +5,10 @@ use warnings;
 use Test::More;
 use Async::Hooks;
 
-eval { require Moose };
-plan skip_all => "Moose is required for these cute tests" if $@;
+BEGIN {
+  eval { require Moose };
+  plan skip_all => "Moose is required for these cute tests" if $@;
+}
 
 
 package ChocolateMoose;
